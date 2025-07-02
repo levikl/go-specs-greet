@@ -35,7 +35,10 @@ func (d *Driver) Greet(name string) (string, error) {
 func (d *Driver) getClient() (GreeterClient, error) {
 	var err error
 	d.connectionOnce.Do(func() {
-		d.conn, err = grpc.Dial(d.Addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		d.conn, err = grpc.Dial( // nolint: staticcheck
+			d.Addr,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
 		d.client = NewGreeterClient(d.conn)
 	})
 	return d.client, err
