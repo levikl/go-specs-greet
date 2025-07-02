@@ -11,21 +11,28 @@ import (
 	"github.com/levikl/go-specs-greet/specifications"
 )
 
+var (
+	rodPort       = "7317"
+	webserverPort = "8081"
+)
+
 func TestGreeterWeb(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
 
-	var (
-		port            = "8081"
-		driver, cleanup = webserver.NewDriver(fmt.Sprintf("http://localhost:%s", port))
-	)
+	_, err := adapters.StartDockerRod(t, rodPort)
+	assert.NoError(t, err)
+
+	webserverIp, err := adapters.StartDockerServer(t, webserverPort, "webserver")
+	assert.NoError(t, err)
+
+	driver, cleanup := webserver.NewDriver(fmt.Sprintf("http://%s:%s", webserverIp, webserverPort))
 
 	t.Cleanup(func() {
 		assert.NoError(t, cleanup())
 	})
 
-	adapters.StartDockerServer(t, port, "webserver")
 	specifications.GreetSpecification(t, driver)
 	specifications.CurseSpecification(t, driver)
 }

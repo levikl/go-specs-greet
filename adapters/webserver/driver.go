@@ -2,6 +2,7 @@ package webserver
 
 import (
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
 
 	"github.com/levikl/go-specs-greet/adapters/webserver/internal/pages"
 )
@@ -12,7 +13,8 @@ type Driver struct {
 }
 
 func NewDriver(baseURL string) (*Driver, func() error) {
-	browser := rod.New().MustConnect()
+	l := launcher.MustNewManaged("")
+	browser := rod.New().Client(l.MustClient()).MustConnect()
 	return &Driver{baseURL: baseURL, browser: browser}, browser.Close
 }
 

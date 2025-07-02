@@ -6,27 +6,30 @@ import (
 	"testing"
 	"time"
 
+	"github.com/alecthomas/assert/v2"
+
 	"github.com/levikl/go-specs-greet/adapters"
 	"github.com/levikl/go-specs-greet/adapters/httpserver"
 	"github.com/levikl/go-specs-greet/specifications"
 )
+
+var port = "8080"
 
 func TestGreeterServer(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
 
-	var (
-		port   = "8080"
-		driver = httpserver.Driver{
-			BaseURL: fmt.Sprintf("http://localhost:%s", port),
-			Client: &http.Client{
-				Timeout: 1 * time.Second,
-			},
-		}
-	)
+	driver := httpserver.Driver{
+		BaseURL: fmt.Sprintf("http://localhost:%s", port),
+		Client: &http.Client{
+			Timeout: 1 * time.Second,
+		},
+	}
 
-	adapters.StartDockerServer(t, port, "httpserver")
+	_, err := adapters.StartDockerServer(t, port, "httpserver")
+	assert.NoError(t, err)
+
 	specifications.GreetSpecification(t, &driver)
 	specifications.CurseSpecification(t, &driver)
 }
