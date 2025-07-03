@@ -24,10 +24,10 @@ func TestGreeterWeb(t *testing.T) {
 	_, err := adapters.StartDockerRod(t, rodPort)
 	assert.NoError(t, err)
 
-	webserverIp, err := adapters.StartDockerServer(t, webserverPort, "webserver")
+	webserverIP, err := adapters.StartDockerServer(t, webserverPort, "webserver")
 	assert.NoError(t, err)
 
-	driver, cleanup := webserver.NewDriver(fmt.Sprintf("http://%s:%s", webserverIp, webserverPort))
+	driver, cleanup := webserver.NewDriver(fmt.Sprintf("http://%s:%s", webserverIP, webserverPort))
 
 	t.Cleanup(func() {
 		assert.NoError(t, cleanup())

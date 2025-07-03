@@ -58,7 +58,7 @@ func (d *Driver) Curse(name string) (string, error) {
 func (d *Driver) getClient() (GreeterClient, error) {
 	var err error
 	d.connectionOnce.Do(func() {
-		d.conn, err = grpc.Dial(
+		d.conn, err = grpc.NewClient(
 			d.Addr,
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		)
