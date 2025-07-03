@@ -3,6 +3,7 @@ package webserver
 import (
 	"embed"
 	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/levikl/go-specs-greet/domain/interactions"
@@ -49,5 +50,7 @@ func (h handler) replyWith(
 }
 
 func (h handler) form(w http.ResponseWriter, _ *http.Request) {
-	h.templ.ExecuteTemplate(w, "form.gohtml", nil) // nolint:errcheck
+	if err := h.templ.ExecuteTemplate(w, "form.gohtml", nil); err != nil {
+		log.Printf("failed to execute template: %v", err)
+	}
 }
