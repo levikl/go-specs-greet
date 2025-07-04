@@ -1,31 +1,14 @@
-version: "2"
 run:
   go: "1.24"
+
 linters:
+  # Enable extra linters besides the default ones
   enable:
-    - goconst
     - godot
-    - misspell
-    - revive
-    - unconvert
-    - whitespace
-  exclusions:
-    generated: lax
-    presets:
-      - comments
-      - common-false-positives
-      - legacy
-      - std-error-handling
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
-formatters:
-  enable:
+    - goconst
+    - govet
     - gofmt
-  exclusions:
-    generated: lax
-    paths:
-      - third_party$
-      - builtin$
-      - examples$
+    - unconvert
+    - misspell
+    - whitespace
+    - revive
